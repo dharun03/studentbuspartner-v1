@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwindcss /forms;
+
+.active {
+  @apply border-s-[3px] border-blue-500 bg-blue-50   text-blue-700;
+}
