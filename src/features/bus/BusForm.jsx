@@ -15,11 +15,13 @@ function BusForm({ isFormOpen, setIsFormOpen }) {
           <TextInput title={"Bus No"} />
           <TextInput title={"Route ID"} />
           <TextInput title={"Driver ID"} />
-          <label>Status</label>
-          <select>
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
+          <>
+            <label className="mb-2">Status</label>
+            <select className="rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600">
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
+          </>
         </form>
         <div className="space-x-4">
           <button

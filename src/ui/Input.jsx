@@ -7,6 +7,7 @@ function TextInput({ title }) {
       <input
         type="text"
         id={title}
+        name={title}
         className="peer mx-1 w-96  border-none bg-transparent py-2 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
         placeholder={title}
       />

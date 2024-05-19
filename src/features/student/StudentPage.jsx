@@ -1,12 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddButton from "../../ui/AddButton";
 import Header from "../../ui/Header";
 import Search from "../../ui/Search";
 import Table from "../../ui/Table";
 import StudentForm from "./StudentForm";
+import db from "../../config/firebase";
+import { getItems } from "../../helper/firebaseFunctions";
+
+const HEADERS = [
+  "Name",
+  "Student ID",
+  "Mail ID",
+  "Phone No",
+  "Pickup Point",
+  "ACTIONS",
+];
+const KEYS = ["name", "studentid", "mailid", "phonenumber", "pickuppoint"];
 
 function StudentPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const [details, setDetails] = useState([]);
+
+  useEffect(() => {
+    const StudentsList = getItems(db, "users");
+    StudentsList.then((data) => setDetails(data));
+  }, []);
 
   return (
     <div>
@@ -25,7 +44,9 @@ function StudentPage() {
       ) : (
         ""
       )}
-      <Table />
+      <Table details={details} headers={HEADERS} keys={KEYS} />
+
+      {}
     </div>
   );
 }
