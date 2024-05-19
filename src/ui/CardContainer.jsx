@@ -1,9 +1,61 @@
+import { useEffect, useState } from "react";
 import Card from "./Card";
+import { collection, getCountFromServer } from "firebase/firestore";
+import { db } from "../config/firebase";
+import { useLoaderData } from "react-router-dom";
+
+const count = {
+  studCount: 0,
+  busCount: 0,
+  driverCount: 0,
+  routeCount: 0,
+  studentQueriesCount: 0,
+  driverQueriesCount: 0,
+};
 
 function CardContainer() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchCount() {
+      try {
+        setIsLoading(true);
+        const studData = collection(db, "users");
+        const sc = await getCountFromServer(studData);
+        count.studCount = sc.data().count;
+        const busData = collection(db, "buses");
+        const bc = await getCountFromServer(busData);
+        count.busCount = bc.data().count;
+        const driverData = collection(db, "drivers");
+        const dc = await getCountFromServer(driverData);
+        count.driverCount = dc.data().count;
+        const routeData = collection(db, "routes");
+        const rc = await getCountFromServer(routeData);
+        count.routeCount = rc.data().count;
+        const StudentQueryData = collection(db, "complaints");
+        const sqc = await getCountFromServer(StudentQueryData);
+        count.studentQueriesCount = sqc.data().count;
+        const DriverQueryData = collection(db, "drivercomplaints");
+        const dqc = await getCountFromServer(DriverQueryData);
+        count.driverQueriesCount = dqc.data().count;
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchCount();
+  }, []);
+
   return (
-    <div className="grid grid-cols-1 gap-4 px-7 lg:grid-cols-4 lg:gap-9">
-      <Card title={"Students"} number={3} color={"bg-blue-500"}>
+    <div className="mb-4 grid grid-cols-1 gap-4 px-7 lg:grid-cols-4 lg:gap-9">
+      <Card
+        title={"Students"}
+        number={count.studCount}
+        color={"bg-blue-500"}
+        to={"/manageStudents"}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="40"
@@ -21,7 +73,12 @@ function CardContainer() {
           />
         </svg>
       </Card>
-      <Card title={"Buses"} number={3} color={"bg-rose-500"}>
+      <Card
+        title={"Buses"}
+        number={count.busCount}
+        color={"bg-rose-500"}
+        to={"/manageBuses"}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="40"
@@ -43,7 +100,12 @@ function CardContainer() {
           </g>
         </svg>
       </Card>
-      <Card title={"Routes"} number={3} color={"bg-orange-400"}>
+      <Card
+        title={"Routes"}
+        number={count.routeCount}
+        color={"bg-orange-400"}
+        to={"/manageRoutes"}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="40"
@@ -61,7 +123,12 @@ function CardContainer() {
           />
         </svg>
       </Card>
-      <Card title={"Drivers"} number={3} color={"bg-gray-950"}>
+      <Card
+        title={"Drivers"}
+        number={count.driverCount}
+        color={"bg-gray-950"}
+        to={"/manageDrivers"}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-steering-wheel"
@@ -82,7 +149,12 @@ function CardContainer() {
           <path d="M14 12l6.75 -2" />
         </svg>
       </Card>
-      <Card title={"Driver Complaints"} number={3} color={"bg-lime-500"}>
+      <Card
+        title={"Driver Complaints"}
+        number={count.driverQueriesCount}
+        color={"bg-lime-500"}
+        to={"/driverComplaints"}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-message-pin"
@@ -103,7 +175,12 @@ function CardContainer() {
           <path d="M19 18v.01" />
         </svg>
       </Card>
-      <Card title={"Student Complaints"} number={3} color={"bg-emerald-500"}>
+      <Card
+        title={"Student Complaints"}
+        number={count.studentQueriesCount}
+        color={"bg-emerald-500"}
+        to={"/studentComplaints"}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="icon icon-tabler icon-tabler-message-exclamation"

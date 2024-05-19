@@ -1,42 +1,65 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddButton from "../../ui/AddButton";
 import Header from "../../ui/Header";
-import Search from "../../ui/Search";
 import Table from "../../ui/Table";
 import StudentForm from "./StudentForm";
-import db from "../../config/firebase";
-import { getItems } from "../../helper/firebaseFunctions";
+import { db } from "../../config/firebase";
+import { useQuery } from "@tanstack/react-query";
+import { collection, getDocs } from "firebase/firestore";
+import Loader from "../../ui/Loader";
+import MyAccount from "../../ui/MyAccount";
 
 const HEADERS = [
   "Name",
   "Student ID",
-  "Mail ID",
+  "Year",
   "Phone No",
+  "Allocated Bus No",
   "Pickup Point",
   "ACTIONS",
 ];
-const KEYS = ["name", "studentid", "mailid", "phonenumber", "pickuppoint"];
+const KEYS = [
+  "name",
+  "studentid",
+  "year",
+  "phonenumber",
+  "busno",
+  "pickuppoint",
+];
 
 function StudentPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const [details, setDetails] = useState([]);
+  const { data, isLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const itemsCol = collection(db, "users");
+      const ItemSnapshot = await getDocs(itemsCol);
+      const itemList = ItemSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      return itemList;
+    },
+  });
 
-  useEffect(() => {
-    const StudentsList = getItems(db, "users");
-    StudentsList.then((data) => setDetails(data));
-  }, []);
+  const StudentsList = data;
+  console.log(StudentsList);
+
+  if (isLoading) return <Loader />;
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <Header image={"ManageStudents.jpeg"} title={"Manage Students"} />
+    <div className="mt-4">
+      <div className="flex justify-end">
+        <MyAccount />
+      </div>
+      <div className={"flex items-center justify-between"}>
+        <Header image={"student.png"} title={"Manage Students"} />
         <div className="my-8 space-y-6">
           <AddButton
             name={"Add Students"}
             onClick={() => setIsFormOpen(true)}
           />
-          <Search />
         </div>
       </div>
       {isFormOpen ? (
@@ -44,11 +67,20 @@ function StudentPage() {
       ) : (
         ""
       )}
-      <Table details={details} headers={HEADERS} keys={KEYS} />
-
-      {}
+      <Table
+        details={StudentsList}
+        headers={HEADERS}
+        keys={KEYS}
+        dbName={"users"}
+      />
     </div>
   );
 }
+
+//eslint-disable-next-line
+// export async function studentListLoader() {
+//   const StudentsList = getItems(db, "users");
+//   return StudentsList;
+// }
 
 export default StudentPage;

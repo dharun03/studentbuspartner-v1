@@ -1,7 +1,7 @@
 function AddButton({ name, onClick }) {
   return (
     <button
-      className="col-span-3 inline-flex items-center gap-2 rounded border border-indigo-600 bg-indigo-600 px-8 py-3 text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
+      className="col-span-3 mr-4 inline-flex items-center gap-2 rounded border border-indigo-600 bg-indigo-600 px-8 py-3 text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
       onClick={onClick}
       data-hs-overlay="#hs-focus-management-modal"
     >

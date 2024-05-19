@@ -1,8 +1,12 @@
 import CardContainer from "../../ui/CardContainer";
+import MyAccount from "../../ui/MyAccount";
 
 function Dashboard() {
   return (
     <div className="mt-4">
+      <div className="flex justify-end">
+        <MyAccount />
+      </div>
       <div className="mb-8 flex items-center gap-2 px-7">
         <>
           <svg

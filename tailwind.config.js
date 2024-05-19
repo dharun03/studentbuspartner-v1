@@ -2,7 +2,16 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    fontFamily: {
+      sans: ["poppins"],
+      inter: ["inter"],
+    },
+
+    extend: {
+      flex: {
+        2: "1 0 10%",
+      },
+    },
   },
-  plugins: ["@tailwindcss/forms"],
+  plugins: [],
 };
