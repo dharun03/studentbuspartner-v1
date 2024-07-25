@@ -6,11 +6,15 @@ import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 import Loader from "../../ui/Loader";
 import MyAccount from "../../ui/MyAccount";
+import { useState } from "react";
+import RouteForm from "./RouteForm";
 
 const HEADERS = ["Routes", "Buses", "Actions"];
 const KEYS = ["id", "buses"];
 
 function RoutePage() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   const { data, isLoading } = useQuery({
     queryKey: ["routes"],
     queryFn: async () => {
@@ -50,7 +54,7 @@ function RoutePage() {
       <div className="flex items-center justify-between">
         <Header image={"routes.png"} title={"Manage Routes"} />
         <div className="my-8 space-y-6">
-          <AddButton name={"Add Route"} />
+          <AddButton name={"Add Route"} onClick={() => setIsFormOpen(true)} />
         </div>
       </div>
       <Table
@@ -59,6 +63,11 @@ function RoutePage() {
         details={routesDetails}
         dbName={"routes"}
       />
+      {isFormOpen ? (
+        <RouteForm isFormOpen={isFormOpen} setIsFormOpen={setIsFormOpen} />
+      ) : (
+        ""
+      )}
     </div>
   );
 }

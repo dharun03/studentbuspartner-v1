@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { IoIosCloseCircle } from "react-icons/io";
 
 function ImageModal({ isOpen, onClose, imgUrl }) {
   useEffect(() => {
@@ -27,12 +28,8 @@ function ImageModal({ isOpen, onClose, imgUrl }) {
           className="relative z-50 rounded-lg bg-white p-8"
           onClick={(e) => e.stopPropagation}
         >
-          <button
-            className="absolute right-4 top-4 z-50 rounded-full bg-red-500 px-2 py-1 text-sm text-white"
-            style={{ transform: "translate(25%, -25%)" }}
-            onClick={onClose}
-          >
-            x
+          <button className="absolute right-2 top-2" onClick={onClose}>
+            <IoIosCloseCircle size={30} color="#dc2626" />
           </button>
           <div style={{ width: "300px", height: "400px" }} className="mt-2">
             <img src={imgUrl} width="300px" height="400px" />

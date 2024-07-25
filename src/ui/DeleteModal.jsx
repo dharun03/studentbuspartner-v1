@@ -1,7 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { db } from "../config/firebase";
+import { db, auth } from "../config/firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import toast from "react-hot-toast";
+import { deleteUser } from "firebase/auth";
+// import { adminAuth } from "../config/adminFirebase";
 
 function DeleteModal({ isOpen, setIsOpen, dbName, id }) {
   const queryClient = useQueryClient();
@@ -9,6 +11,14 @@ function DeleteModal({ isOpen, setIsOpen, dbName, id }) {
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const docRef = await doc(db, dbName, id);
+      if (dbName == "users") {
+        // await console.log(docRef);
+        // try {
+        //   await deleteUser(adminAuth, id);
+        // } catch (err) {
+        //   console.log(err);
+        // }
+      }
       await deleteDoc(docRef);
     },
 

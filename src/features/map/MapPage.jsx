@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { IoIosCloseCircle } from "react-icons/io";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 const MapModal = ({ isOpen, onClose, details }) => {
@@ -26,17 +27,13 @@ const MapModal = ({ isOpen, onClose, details }) => {
             className="relative z-50 rounded-lg bg-white p-8"
             onClick={(e) => e.stopPropagation}
           >
-            <button
-              className="absolute right-4 top-4 z-50 rounded-full bg-red-500 px-2 py-1 text-sm text-white"
-              style={{ transform: "translate(25%, -25%)" }}
-              onClick={onClose}
-            >
-              x
+            <button className="absolute right-4 top-2" onClick={onClose}>
+              <IoIosCloseCircle size={30} color="#dc2626" />
             </button>
 
             <div
               style={{ width: "700px", height: "600px" }}
-              className="mt-2"
+              className="mt-4"
               onClick={(e) => e.stopPropagation}
             >
               <MapContainer

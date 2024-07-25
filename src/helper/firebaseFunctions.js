@@ -5,7 +5,6 @@ import {
   deleteDoc,
   doc,
   getCountFromServer,
-  getDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 
@@ -30,8 +29,7 @@ async function getItems(db, col) {
 }
 
 async function addItem(db, col, value) {
-  const docRef = await addDoc(collection(db, col), value);
-  console.log("Document written with ID: ", docRef.id);
+  await addDoc(collection(db, col), value);
 }
 
 async function deleteItem(db, col, id) {
