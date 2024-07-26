@@ -3,13 +3,17 @@ import { TextInput } from "../../ui/Input";
 import { addItem } from "../../helper/firebaseFunctions";
 import { db } from "../../config/firebase";
 
-function DriverForm({ isFormOpen, setIsFormOpen }) {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    driverid: "",
-    licenseid: "",
-    phno: "",
-  });
+function DriverForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
+  const [formValues, setFormValues] = useState(
+    isEditSession
+      ? editRow
+      : {
+          name: "",
+          driverid: "",
+          licenseid: "",
+          phno: "",
+        },
+  );
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -19,7 +23,6 @@ function DriverForm({ isFormOpen, setIsFormOpen }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setIsFormOpen(false);
     addItem(db, "drivers", formValues);
   };

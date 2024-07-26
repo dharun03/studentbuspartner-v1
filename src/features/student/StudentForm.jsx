@@ -7,19 +7,23 @@ import toast from "react-hot-toast";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Select from "react-select";
 
-function StudentForm({ isFormOpen, setIsFormOpen }) {
+function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
   const queryClient = useQueryClient();
   const [pickupPoints, setPickupPoints] = useState([]);
   const [buses, setBuses] = useState([]);
-  const [formValues, setFormValues] = useState({
-    name: "",
-    studentid: "",
-    mailid: "",
-    phonenumber: "",
-    year: "",
-    pickuppoint: "",
-    busno: "",
-  });
+  const [formValues, setFormValues] = useState(
+    isEditSession
+      ? editRow
+      : {
+          name: "",
+          studentid: "",
+          mailid: "",
+          phonenumber: "",
+          year: "",
+          pickuppoint: "",
+          busno: "",
+        },
+  );
 
   useEffect(() => {
     const fetchPickupPoints = async () => {
@@ -62,17 +66,24 @@ function StudentForm({ isFormOpen, setIsFormOpen }) {
 
   const { mutate } = useMutation({
     mutationFn: async (data) => {
-      const newUser = await createUserWithEmailAndPassword(
-        auth,
-        data.mailid,
-        "Welcome@123",
-      );
-      const id = newUser.user.uid;
-      await setDoc(doc(db, "users", id), data);
+      if (!isEditSession) {
+        const newUser = await createUserWithEmailAndPassword(
+          auth,
+          data.mailid,
+          "Welcome@123",
+        );
+        const id = newUser.user.uid;
+        await setDoc(doc(db, "users", id), data);
+      } else {
+        const { id } = data;
+        await setDoc(doc(db, "users", id), data);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success("Student added successfully");
+      isEditSession
+        ? toast.success("Student updated successfully")
+        : toast.success("Student added successfully");
     },
     onError: () => {
       toast.error("Something went wrong!");

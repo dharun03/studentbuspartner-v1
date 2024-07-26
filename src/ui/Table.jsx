@@ -2,9 +2,11 @@ import { useState } from "react";
 import DeleteModal from "./DeleteModal";
 import MapModal from "../features/map/MapPage";
 import Search from "./Search";
-import ColumnFilter from "./ColumnFilter";
 import ImageModal from "./ImageModal";
-import { SelectInput } from "./Input";
+import { MdEdit } from "react-icons/md";
+
+import StudentForm from "../features/student/StudentForm";
+import DriverForm from "../features/driver/DriverForm";
 
 function Table({ details, headers, keys, dbName }) {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -12,8 +14,9 @@ function Table({ details, headers, keys, dbName }) {
   const [id, setId] = useState("");
   const [isMapModalOpen, setMapModalOpen] = useState(false);
   const [isImageModalOpen, setImageModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editRow, setEditRow] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
-
   const [imgUrl, setImageUrl] = useState("");
 
   const [visibleColumns, setVisibleColumns] = useState(() => {
@@ -23,8 +26,26 @@ function Table({ details, headers, keys, dbName }) {
     });
     return initialVisibleColumns;
   });
-  const [selectedBus, setSelectedBus] = useState(null); // State for selected bus
+  const [selectedBus, setSelectedBus] = useState(null);
   const itemsPerPage = 30;
+
+  const handleEdit = () => {
+    // setIsEditModalOpen(true);
+    if (dbName === "users") {
+      return (
+        <StudentForm
+          isFormOpen={true}
+          setIsFormOpen={setIsEditModalOpen}
+          isEditSession={true}
+          editRow={editRow}
+        />
+      );
+    } else if (dbName === "drivers") {
+      return (
+        <DriverForm isFormOpen={true} setIsFormOpen={setIsEditModalOpen} />
+      );
+    }
+  };
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -103,6 +124,20 @@ function Table({ details, headers, keys, dbName }) {
               />
             </svg>
           )}
+          {(dbName === "users" ||
+            dbName === "drivers" ||
+            dbName == "routes") && (
+            <MdEdit
+              cursor="pointer"
+              size={24}
+              className="transition-all duration-75 hover:scale-125"
+              color="#60a5fa"
+              onClick={() => {
+                setIsEditModalOpen(true);
+                setEditRow(row);
+              }}
+            />
+          )}
 
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -170,6 +205,8 @@ function Table({ details, headers, keys, dbName }) {
             imgUrl={imgUrl}
           />
         )}
+
+        {isEditModalOpen && handleEdit()}
 
         <div className="overflow-x-auto overflow-y-auto rounded-t-lg">
           <table className=" max-h-56 min-w-full  divide-y-2 divide-gray-200 text-sm">

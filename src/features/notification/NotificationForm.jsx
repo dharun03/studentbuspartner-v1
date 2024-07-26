@@ -3,6 +3,7 @@ import { db } from "../../config/firebase";
 import { DateInput, TextInput, TimeInput } from "../../ui/Input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDoc, collection } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 function NotificationForm({ isFormOpen, setIsFormOpen }) {
   const queryClient = useQueryClient();
@@ -17,9 +18,15 @@ function NotificationForm({ isFormOpen, setIsFormOpen }) {
   const { mutate } = useMutation({
     mutationFn: async (data) => {
       await addDoc(collection(db, "notifications"), data);
+      // console.log(new Date().toTimeString);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      toast.success("Notification sent successfully");
+    },
+    onError: () => {
+      toast.error("Notification failed");
+      // console.log(new Date().toTimeString);
     },
   });
 
@@ -59,7 +66,7 @@ function NotificationForm({ isFormOpen, setIsFormOpen }) {
             value={description}
             onChange={handleChange}
           />
-          <DateInput
+          {/* <DateInput
             title={"Select Date"}
             name={"date"}
             value={date}
@@ -70,7 +77,7 @@ function NotificationForm({ isFormOpen, setIsFormOpen }) {
             name={"time"}
             value={time}
             onChange={handleChange}
-          />
+          /> */}
 
           <div className="space-x-4">
             <button

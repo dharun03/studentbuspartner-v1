@@ -22,7 +22,6 @@
   @apply rounded-md border-s-[3px] border-white bg-zinc-700 text-white;
 }
 
-/* HTML: <div class="loader"></div> */
 .loader {
   width: 50px;
   padding: 8px;

@@ -44,7 +44,7 @@ function StudentPage() {
   });
 
   const StudentsList = data;
-  console.log(StudentsList);
+  // console.log(StudentsList);
 
   if (isLoading) return <Loader />;
 

@@ -66,7 +66,7 @@ async function getRoutes() {
     id: doc.id,
   }));
 
-  console.log(itemList);
+  // console.log(itemList);
 
   const busList = itemList.map((bus) => {
     const len = Object.keys(bus).length - 1;
@@ -79,7 +79,7 @@ async function getRoutes() {
     return { ...bus, buses };
   });
 
-  console.log();
+  // console.log();
   return busList;
 }
 
