@@ -7,14 +7,27 @@ import { CgAdd } from "react-icons/cg";
 import { IoIosCloseCircle } from "react-icons/io";
 import toast from "react-hot-toast";
 
-export default function RouteForm({ isFormOpen, setIsFormOpen }) {
+export default function RouteForm({
+  isFormOpen,
+  setIsFormOpen,
+  isEditSession,
+  editRow,
+}) {
   const queryClient = useQueryClient();
 
-  const [formValues, setFormValues] = useState({
-    route: "",
-  });
+  const [formValues, setFormValues] = useState(
+    isEditSession
+      ? { route: editRow.id }
+      : {
+          route: "",
+        },
+  );
 
-  const [inputFields, setInputFields] = useState([{ busno: "" }]);
+  const [inputFields, setInputFields] = useState(
+    isEditSession
+      ? editRow.buses.map((bus) => ({ busno: bus }))
+      : [{ busno: "" }],
+  );
 
   const addInputField = () => {
     setInputFields([...inputFields, { busno: "" }]);
@@ -35,20 +48,27 @@ export default function RouteForm({ isFormOpen, setIsFormOpen }) {
 
   const { mutate } = useMutation({
     mutationFn: async (data) => {
-      const docRef = doc(db, "routes", data.route);
-      delete data.route; // Remove the route from the data object
-      await setDoc(docRef, data);
+      if (!isEditSession) {
+        const docRef = doc(db, "routes", data.route);
+        delete data.route;
+        await setDoc(docRef, data);
+      } else {
+        const docRef = doc(db, "routes", data.route);
+        delete data.route;
+        await setDoc(docRef, data);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["routes"] });
-      toast.success("Route added successfully");
+      isEditSession
+        ? toast.success("Route updated successfully")
+        : toast.success("Route added successfully");
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Create an object with numeric keys for bus fields
     const buses = inputFields.reduce((acc, field, index) => {
       acc[`${index + 1}`] = field.busno;
       return acc;
@@ -74,7 +94,9 @@ export default function RouteForm({ isFormOpen, setIsFormOpen }) {
       <div
         className={`z-10 rounded bg-white p-8 shadow-lg ${isFormOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"}`}
       >
-        <h2 className="mb-6 text-xl font-bold">Add Routes</h2>
+        <h2 className="mb-6 text-xl font-bold">
+          {isEditSession ? "Edit Route" : "Add Route"}
+        </h2>
         <form className="mb-3 flex flex-col gap-5" onSubmit={handleSubmit}>
           <TextInput
             title={"Route Name"}

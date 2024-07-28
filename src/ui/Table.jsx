@@ -7,6 +7,7 @@ import { MdEdit } from "react-icons/md";
 
 import StudentForm from "../features/student/StudentForm";
 import DriverForm from "../features/driver/DriverForm";
+import RouteForm from "../features/route/RouteForm";
 
 function Table({ details, headers, keys, dbName }) {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -43,6 +44,15 @@ function Table({ details, headers, keys, dbName }) {
     } else if (dbName === "drivers") {
       return (
         <DriverForm isFormOpen={true} setIsFormOpen={setIsEditModalOpen} />
+      );
+    } else if (dbName === "routes") {
+      return (
+        <RouteForm
+          isFormOpen={true}
+          setIsFormOpen={setIsEditModalOpen}
+          isEditSession={true}
+          editRow={editRow}
+        />
       );
     }
   };
@@ -135,6 +145,7 @@ function Table({ details, headers, keys, dbName }) {
               onClick={() => {
                 setIsEditModalOpen(true);
                 setEditRow(row);
+                console.log(row);
               }}
             />
           )}
