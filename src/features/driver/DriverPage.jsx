@@ -9,8 +9,15 @@ import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs } from "firebase/firestore";
 import MyAccount from "../../ui/MyAccount";
 
-const HEADERS = ["Name", "Driver ID", "Mobile No.", "License No.", "Actions"];
-const KEYS = ["name", "driverid", "phno", "licenseid"];
+const HEADERS = [
+  "Name",
+  "Driver ID",
+  "Mobile No.",
+  "License No.",
+  "Bus No.",
+  "Actions",
+];
+const KEYS = ["name", "driverid", "phno", "licenseid", "busno"];
 
 function DriverPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);

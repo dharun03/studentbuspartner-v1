@@ -7,18 +7,18 @@ import { useLoaderData } from "react-router-dom";
 import { db } from "../../config/firebase";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useQuery } from "@tanstack/react-query";
-import Calendar from "react-calendar"; // Importing the Calendar component from react-calendar
-import "react-calendar/dist/Calendar.css"; // Importing the default CSS styles for the calendar
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import MyAccount from "../../ui/MyAccount";
 import Loader from "../../ui/Loader";
 import { SelectInput } from "../../ui/Input";
 
-const HEADERS = ["Bus", "Count", "Actions"]; // Fixing the header typo
+const HEADERS = ["Bus", "Count"]; // Fixing the header typo
 const KEYS = ["bus", "count"];
 
 function AttendencePage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // State to store the selected date
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [matchedDocument, setMatchedDocument] = useState(null);
 
   const { data: busList, isLoading } = useQuery({
@@ -37,28 +37,26 @@ function AttendencePage() {
   if (isLoading) return <Loader />;
   if (!busList) return null;
 
-  // Function to handle date change
   const handleDateChange = (date) => {
-    setSelectedDate(date); // Update the selected date state
+    setSelectedDate(date);
     const year = date.getFullYear();
-    const month = date.getMonth() + 1; // Month starts from 0
+    const month = date.getMonth() + 1;
     const day = date.getDate();
     const formattedDate = `${year}-${month}-${day}`;
-    console.log("Selected Date:", formattedDate); // Print the selected date
+    console.log("Selected Date:", formattedDate);
     const matchedDocument = busList.find((item) => item.id === formattedDate);
     if (matchedDocument) {
-      console.log(true); // Print true if document name matches the selected date
+      console.log(true);
       setMatchedDocument(matchedDocument);
     } else {
-      console.log(false); // Print false if no match found
+      console.log(false);
       setMatchedDocument(null);
     }
   };
 
-  // Rendered table data based on the matched document
   const renderedData = matchedDocument
     ? Object.keys(matchedDocument)
-        .filter((key) => key !== "id" && key !== "totalcount") // Exclude "id" and "totalcount" keys
+        .filter((key) => key !== "id" && key !== "totalcount")
         .map((key) => ({ bus: key, count: matchedDocument[key] }))
     : [];
 
@@ -93,7 +91,6 @@ function AttendencePage() {
           )}
         </div>
         <div className="mr-4 w-1/4">
-          {/* Render the calendar component here */}
           <Calendar
             onChange={handleDateChange}
             value={selectedDate}

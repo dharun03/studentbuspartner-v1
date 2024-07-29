@@ -50,7 +50,7 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
 
       if (routeSnapshot.exists()) {
         const routeData = routeSnapshot.data();
-        // Transform routeData to array of buses
+
         const busesList = Object.values(routeData).map((value, index) => ({
           id: index + 1,
           name: value,
@@ -102,7 +102,7 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
       busno: "",
     });
     fetchBuses(selectedOption.value);
-    setBuses([]); // Clear buses when pickup point changes
+    setBuses([]);
   };
 
   const handleBusChange = (selectedOption) => {
