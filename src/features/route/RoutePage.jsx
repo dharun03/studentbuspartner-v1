@@ -9,7 +9,7 @@ import MyAccount from "../../ui/MyAccount";
 import { useState } from "react";
 import RouteForm from "./RouteForm";
 
-const HEADERS = ["Routes", "Buses", "Actions"];
+const HEADERS = ["S.No", "Routes", "Buses", "Actions"];
 const KEYS = ["id", "buses"];
 
 function RoutePage() {

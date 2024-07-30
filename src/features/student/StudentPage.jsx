@@ -10,11 +10,12 @@ import Loader from "../../ui/Loader";
 import MyAccount from "../../ui/MyAccount";
 
 const HEADERS = [
+  "S.No",
   "Name",
   "Student ID",
   "Year",
   "Phone No",
-  "Allocated Bus No",
+  "Bus No",
   "Pickup Point",
   "ACTIONS",
 ];

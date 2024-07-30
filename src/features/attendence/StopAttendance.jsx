@@ -13,7 +13,7 @@ import MyAccount from "../../ui/MyAccount";
 import Loader from "../../ui/Loader";
 import { SelectInput } from "../../ui/Input";
 
-const HEADERS = ["Stops", "Count"];
+const HEADERS = ["S.No", "Stops", "Count"];
 const KEYS = ["stop", "count"];
 
 function AttendencePage() {

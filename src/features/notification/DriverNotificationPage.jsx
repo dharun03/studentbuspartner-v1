@@ -10,7 +10,7 @@ import Loader from "../../ui/Loader";
 import MyAccount from "../../ui/MyAccount";
 import DriverNotificationForm from "./DriverNotificationForm";
 
-const HEADERS = ["Title", "Description", "Date", "Time", "Actions"];
+const HEADERS = ["S.No", "Title", "Description", "Date", "Time", "Actions"];
 const KEYS = ["title", "description", "date", "time"];
 
 function NotificationPage() {

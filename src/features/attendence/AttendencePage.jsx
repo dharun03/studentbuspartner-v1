@@ -13,7 +13,7 @@ import MyAccount from "../../ui/MyAccount";
 import Loader from "../../ui/Loader";
 import { SelectInput } from "../../ui/Input";
 
-const HEADERS = ["Bus", "Count"]; // Fixing the header typo
+const HEADERS = ["S.No", "Bus", "Count"]; // Fixing the header typo
 const KEYS = ["bus", "count"];
 
 function AttendencePage() {

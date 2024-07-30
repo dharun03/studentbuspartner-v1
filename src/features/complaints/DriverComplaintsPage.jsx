@@ -6,8 +6,8 @@ import { collection, getDocs } from "firebase/firestore";
 import Loader from "../../ui/Loader";
 import MyAccount from "../../ui/MyAccount";
 
-const HEADERS = ["Driver ID", "Name", "Issue", "ACTIONS"];
-const KEYS = ["driverid", "name", "issue"];
+const HEADERS = ["S.No", "Driver ID", "Name", "Bus No", "Issue", "ACTIONS"];
+const KEYS = ["driverid", "name", "busno", "issue"];
 
 function DriverComplaintsPage() {
   const { data, isLoading } = useQuery({

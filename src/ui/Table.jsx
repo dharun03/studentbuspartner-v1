@@ -19,6 +19,7 @@ function Table({ details, headers, keys, dbName }) {
   const [editRow, setEditRow] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [imgUrl, setImageUrl] = useState("");
+  const [sno, setSno] = useState(1);
 
   const [visibleColumns, setVisibleColumns] = useState(() => {
     const initialVisibleColumns = {};
@@ -87,16 +88,19 @@ function Table({ details, headers, keys, dbName }) {
   const renderRows = () => {
     return getCurrentPageData().map((row, index) => (
       <tr key={index}>
+        <td className="whitespace-nowrap bg-white px-4 py-3 text-left text-xs text-gray-900">
+          {index + 1}
+        </td>
         {keys.map((key, i) => (
           <td
-            className="whitespace-nowrap bg-white px-4 py-3 text-center text-xs text-gray-900"
+            className="whitespace-nowrap bg-white px-4 py-3 text-left text-xs text-gray-900"
             key={i}
           >
             {key === "buses" ? row[key].join(", ") : row[key]}
           </td>
         ))}
 
-        <td className="flex justify-center gap-3 bg-white pt-1.5 text-center">
+        <td className="flex justify-center gap-3 bg-white pt-1.5">
           {dbName === "buses" && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -232,7 +236,7 @@ function Table({ details, headers, keys, dbName }) {
               <tr>
                 {headers.map((header, i) => (
                   <th
-                    className="whitespace-nowrap px-4 py-2 font-medium uppercase text-gray-900"
+                    className="whitespace-nowrap px-4 py-2 text-left font-medium uppercase text-gray-900"
                     key={i}
                   >
                     {header}

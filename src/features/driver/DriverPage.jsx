@@ -10,6 +10,7 @@ import { collection, getDocs } from "firebase/firestore";
 import MyAccount from "../../ui/MyAccount";
 
 const HEADERS = [
+  "S.No",
   "Name",
   "Driver ID",
   "Mobile No.",

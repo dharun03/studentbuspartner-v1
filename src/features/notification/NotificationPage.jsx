@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loader from "../../ui/Loader";
 import MyAccount from "../../ui/MyAccount";
 
-const HEADERS = ["Title", "Description", "Date", "Time", "Actions"];
+const HEADERS = ["S.No", "Title", "Description", "Date", "Time", "Actions"];
 const KEYS = ["title", "description", "date", "time"];
 
 function NotificationPage() {

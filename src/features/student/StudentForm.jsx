@@ -7,6 +7,27 @@ import toast from "react-hot-toast";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Select from "react-select";
 
+// Function to calculate the difference in years from May to May
+function differenceInMayYears(date1, date2) {
+  const year1 = date1.getFullYear();
+  const month1 = date1.getMonth();
+  const day1 = date1.getDate();
+
+  const year2 = date2.getFullYear();
+  const month2 = date2.getMonth();
+  const day2 = date2.getDate();
+
+  let age = year2 - year1;
+
+  // Adjust for May-to-May year calculation
+  if (month2 < 4 || (month2 === 4 && day2 < day1)) {
+    // 4 represents May (0-indexed)
+    age--;
+  }
+
+  return age;
+}
+
 function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
   const queryClient = useQueryClient();
   const [pickupPoints, setPickupPoints] = useState([]);
@@ -17,9 +38,7 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
       : {
           name: "",
           studentid: "",
-          mailid: "",
           phonenumber: "",
-          year: "",
           pickuppoint: "",
           busno: "",
         },
@@ -50,7 +69,7 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
 
       if (routeSnapshot.exists()) {
         const routeData = routeSnapshot.data();
-
+        // Transform routeData to array of buses
         const busesList = Object.values(routeData).map((value, index) => ({
           id: index + 1,
           name: value,
@@ -69,7 +88,7 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
       if (!isEditSession) {
         const newUser = await createUserWithEmailAndPassword(
           auth,
-          data.mailid,
+          `${data.studentid.toLowerCase()}@sairamtap.edu.in`,
           "Welcome@123",
         );
         const id = newUser.user.uid;
@@ -102,20 +121,35 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
       busno: "",
     });
     fetchBuses(selectedOption.value);
-    setBuses([]);
+    setBuses([]); // Clear buses when pickup point changes
   };
 
   const handleBusChange = (selectedOption) => {
     setFormValues({ ...formValues, busno: selectedOption.value });
   };
 
-  const { name, studentid, mailid, phonenumber, pickuppoint, busno, year } =
-    formValues;
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsFormOpen(false);
-    mutate(formValues);
+
+    // Derive year from studentid
+    const studentYearStr = formValues.studentid.substring(3, 5);
+    const studentYear = parseInt(studentYearStr, 10);
+
+    // Current date
+    const currentDate = new Date();
+
+    // May 1st of the student year
+    const studentYearMay = new Date(`May 1, 20${studentYear}`);
+
+    // Calculate difference in years from May to May
+    const year = differenceInMayYears(studentYearMay, currentDate) + 1;
+
+    mutate({
+      ...formValues,
+      year: year.toString(),
+      mailid: `${formValues.studentid.toLowerCase()}@sairamtap.edu.in`,
+    });
   };
 
   const pickupPointOptions = pickupPoints.map((point) => ({
@@ -124,13 +158,19 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
   }));
   const busOptions = buses.map((bus) => ({ value: bus.name, label: bus.name }));
 
+  const { name, studentid, phonenumber, pickuppoint, busno } = formValues;
+
   return (
     <div className="fixed inset-0 top-3 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden outline-none focus:outline-none">
       <div
-        className={`fixed inset-0 min-w-28 ${isFormOpen ? "visible bg-black/20" : "invisible"}`}
+        className={`fixed inset-0 min-w-28 ${
+          isFormOpen ? "visible bg-black/20" : "invisible"
+        }`}
       ></div>
       <div
-        className={`z-10 rounded bg-white p-8 shadow-lg ${isFormOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"}`}
+        className={`z-10 rounded bg-white p-8 shadow-lg ${
+          isFormOpen ? "scale-100 opacity-100" : "scale-125 opacity-0"
+        }`}
       >
         <h2 className="mb-6 text-xl font-bold">Add Student</h2>
         <form className="mb-3 flex flex-col gap-5" onSubmit={handleSubmit}>
@@ -144,18 +184,6 @@ function StudentForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
             title={"Student ID"}
             name={"studentid"}
             value={studentid}
-            onChange={handleChange}
-          />
-          <TextInput
-            title={"Mail ID"}
-            name={"mailid"}
-            value={mailid}
-            onChange={handleChange}
-          />
-          <TextInput
-            title={"Year"}
-            name={"year"}
-            value={year}
             onChange={handleChange}
           />
           <TextInput
