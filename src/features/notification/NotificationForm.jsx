@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 
 function NotificationForm({ isFormOpen, setIsFormOpen }) {
   const queryClient = useQueryClient();
+  // const date = `${new Date().toLocaleDateString}`
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -32,15 +33,26 @@ function NotificationForm({ isFormOpen, setIsFormOpen }) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues({
+      ...formValues,
+      [name]: value,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+    });
   };
 
   const { title, description, date, time } = formValues;
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsFormOpen(false);
-    mutate(formValues);
+    try {
+      e.preventDefault();
+      setIsFormOpen(false);
+      mutate(formValues);
+      console.log(date);
+      console.log(time);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (

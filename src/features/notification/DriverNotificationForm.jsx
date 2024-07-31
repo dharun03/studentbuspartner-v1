@@ -3,6 +3,7 @@ import { db } from "../../config/firebase";
 import { DateInput, TextInput, TimeInput } from "../../ui/Input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { addDoc, collection } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 function DriverNotificationForm({ isFormOpen, setIsFormOpen }) {
   const queryClient = useQueryClient();
@@ -20,12 +21,21 @@ function DriverNotificationForm({ isFormOpen, setIsFormOpen }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["drivernotifications"] });
+      toast.success("Notification Sent Successfully");
+    },
+    onError: () => {
+      toast.error("Notification Failed");
     },
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormValues({
+      ...formValues,
+      [name]: value,
+      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(),
+    });
   };
 
   const { title, description, date, time } = formValues;
@@ -59,7 +69,7 @@ function DriverNotificationForm({ isFormOpen, setIsFormOpen }) {
             value={description}
             onChange={handleChange}
           />
-          <DateInput
+          {/* <DateInput
             title={"Select Date"}
             name={"date"}
             value={date}
@@ -70,7 +80,7 @@ function DriverNotificationForm({ isFormOpen, setIsFormOpen }) {
             name={"time"}
             value={time}
             onChange={handleChange}
-          />
+          /> */}
 
           <div className="space-x-4">
             <button

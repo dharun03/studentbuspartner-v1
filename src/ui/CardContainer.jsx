@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
-import { collection, getCountFromServer } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getCountFromServer,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../config/firebase";
 import { useLoaderData } from "react-router-dom";
+import { BiMessageAltCheck } from "react-icons/bi";
 
 const count = {
   studCount: 0,
@@ -11,6 +17,7 @@ const count = {
   routeCount: 0,
   studentQueriesCount: 0,
   driverQueriesCount: 0,
+  complaintsRectified: 0,
 };
 
 function CardContainer() {
@@ -38,6 +45,8 @@ function CardContainer() {
         const DriverQueryData = collection(db, "drivercomplaints");
         const dqc = await getCountFromServer(DriverQueryData);
         count.driverQueriesCount = dqc.data().count;
+        const docRef = await doc(db, "complaintsrectified", "rectified");
+        count.complaintsRectified = (await getDoc(docRef)).data().count;
       } catch (err) {
         console.error(err);
       } finally {
@@ -47,6 +56,15 @@ function CardContainer() {
 
     fetchCount();
   }, []);
+
+  // async function fetchComplaintsRectified() {
+  //   const docRef = await doc(db, "complaintsrectified", "rectified");
+  //   const count = (await getDoc(docRef)).data().count;
+  //   console.log(count);
+  //   return count;
+  // }
+
+  // const complaintsCount = fetchComplaintsRectified();
 
   return (
     <div className="mb-4 grid grid-cols-1 gap-4 px-7 lg:grid-cols-4 lg:gap-9">
@@ -200,6 +218,14 @@ function CardContainer() {
           <path d="M19 16v3" />
           <path d="M19 22v.01" />
         </svg>
+      </Card>
+      <Card
+        title={"Complaints Rectified"}
+        number={count.complaintsRectified}
+        color={"bg-sky-400"}
+        to={"/"}
+      >
+        <BiMessageAltCheck size={40} color="white" className="pt-1.5" />
       </Card>
     </div>
   );

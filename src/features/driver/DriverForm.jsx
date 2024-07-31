@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TextInput } from "../../ui/Input";
 import { addItem } from "../../helper/firebaseFunctions";
-import { db } from "../../config/firebase";
+import { auth, db } from "../../config/firebase";
 import Select from "react-select";
 import {
   QueryClient,
@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-query";
 import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 function DriverForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
   const queryClient = useQueryClient();
@@ -79,7 +80,13 @@ function DriverForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
   const { mutate } = useMutation({
     mutationFn: async (data) => {
       if (!isEditSession) {
-        await addDoc(collection(db, "drivers"), data);
+        const newUser = await createUserWithEmailAndPassword(
+          auth,
+          `${data.driverid.toLowerCase()}@sairamtap.edu.in`,
+          "Welcome@123",
+        );
+        const id = newUser.user.uid;
+        await setDoc(doc(db, "drivers", id), data);
       } else {
         const { id } = data;
         const { busno } = data;
@@ -93,6 +100,29 @@ function DriverForm({ isFormOpen, setIsFormOpen, isEditSession, editRow }) {
         });
       }
     },
+
+    // if (!isEditSession) {
+    //   const newUser = await createUserWithEmailAndPassword(
+    //     auth,
+    //     `${data.studentid.toLowerCase()}@sairamtap.edu.in`,
+    //     "Welcome@123",
+    //   );
+    //   const id = newUser.user.uid;
+    //   await setDoc(doc(db, "users", id), data);
+    //   await addDoc(collection(db, "drivers"), data);
+    // } else {
+    //   const { id } = data;
+    //   const { busno } = data;
+    //   await setDoc(doc(db, "drivers", id), data);
+
+    //   await setDoc(doc(db, "buses", busno), {
+    //     name: name,
+    //     phno: phno,
+    //     // latitude: latitude,
+    //     // longitude: longitude,
+    //   });
+    // }
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["drivers"] });
       isEditSession

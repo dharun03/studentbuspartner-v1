@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { db, auth } from "../config/firebase";
-import { deleteDoc, doc } from "firebase/firestore";
+import { count, deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { deleteUser } from "firebase/auth";
 // import { adminAuth } from "../config/adminFirebase";
@@ -19,6 +19,20 @@ function DeleteModal({ isOpen, setIsOpen, dbName, id }) {
         //   console.log(err);
         // }
       }
+
+      if (dbName === "complaints") {
+        try {
+          const docRef = await doc(db, "complaintsrectified", "rectified");
+          const count = (await getDoc(docRef)).data().count;
+          await setDoc(doc(db, "complaintsrectified", "rectified"), {
+            count: count + 1,
+          });
+        } catch (e) {
+          console.log(e);
+        }
+        // await setDoc(docRef, { count: count + 1 });
+      }
+
       await deleteDoc(docRef);
     },
 

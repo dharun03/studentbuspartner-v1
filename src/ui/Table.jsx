@@ -88,19 +88,19 @@ function Table({ details, headers, keys, dbName }) {
   const renderRows = () => {
     return getCurrentPageData().map((row, index) => (
       <tr key={index}>
-        <td className="whitespace-nowrap bg-white px-4 py-3 text-left text-xs text-gray-900">
+        <td className="whitespace-nowrap bg-white px-4 py-3 text-left text-xs text-gray-900 2xl:text-sm">
           {index + 1}
         </td>
         {keys.map((key, i) => (
           <td
-            className="whitespace-nowrap bg-white px-4 py-3 text-left text-xs text-gray-900"
+            className="max-w-48 break-words bg-white px-4 py-3 text-left text-xs text-gray-900 xl:text-xs 2xl:text-sm"
             key={i}
           >
             {key === "buses" ? row[key].join(", ") : row[key]}
           </td>
         ))}
 
-        <td className="flex justify-center gap-3 bg-white pt-1.5">
+        <td className="flex justify-center gap-3 bg-white pt-1.5 align-middle xl:text-xs 2xl:text-base">
           {dbName === "buses" && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -231,9 +231,9 @@ function Table({ details, headers, keys, dbName }) {
         {isEditModalOpen && handleEdit()}
 
         <div className="overflow-x-auto overflow-y-auto rounded-t-lg">
-          <table className=" max-h-56 min-w-full  divide-y-2 divide-gray-200 text-sm">
-            <thead className="bg-slate-200 ltr:text-left rtl:text-right">
-              <tr>
+          <table className=" max-h-56 w-full  divide-y-2 divide-gray-200 text-sm">
+            <thead className="w-full bg-slate-200 2xl:text-base ltr:text-left rtl:text-right">
+              <tr className="bg-slate-200">
                 {headers.map((header, i) => (
                   <th
                     className="whitespace-nowrap px-4 py-2 text-left font-medium uppercase text-gray-900"

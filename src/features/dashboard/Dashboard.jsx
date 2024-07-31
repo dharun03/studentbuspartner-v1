@@ -9,7 +9,7 @@ function Dashboard() {
       </div>
       <div className="mb-8 flex items-center gap-2 px-7">
         <>
-          <svg
+        <svg
             xmlns="http://www.w3.org/2000/svg"
             className="icon icon-tabler icon-tabler-layout-dashboard"
             width="32"
